@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements ActionListener {
 
         for(int i = 0; i < bodyParts; i++){
             if(i == 0){
-                g.setColor(Color.green);
+                g.setColor(Color.BLUE);
                 g.fillRect(x[i], y[i], UNIT_SIZE,UNIT_SIZE);
 
             }
@@ -64,8 +64,8 @@ public class GamePanel extends JPanel implements ActionListener {
         }
     }
     public void newApple(){
-        appleX = random.nextInt((int)SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
-        appleY = random.nextInt((int)SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
+        appleX = random.nextInt(SCREEN_WIDTH/UNIT_SIZE)*UNIT_SIZE;
+        appleY = random.nextInt(SCREEN_HEIGHT/UNIT_SIZE)*UNIT_SIZE;
 
     }
     public void move(){
@@ -96,7 +96,28 @@ public class GamePanel extends JPanel implements ActionListener {
 
     }
     public void checkCollisions(){
-
+        //checks if head collides with body
+        for(int i = bodyParts; i>0; i--){
+            if((x[0] == x[i]) && (y[0] == y[i])){
+                running = false;
+            }
+        }
+        // checks for game borders
+        if(x[0] <0){
+            running = false;
+        }
+        if(x[0] > SCREEN_WIDTH){
+            running = false;
+        }
+        if(y[0] < 0){
+            running = false;
+        }
+        if(y[0] > SCREEN_HEIGHT){
+            running = false;
+        }
+        if(!running){
+            timer.stop();
+        }
     }
     public void gameOver(Graphics g){
 
@@ -105,6 +126,12 @@ public class GamePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
 
+        if(running){
+            move();
+            checkPoints();
+            checkCollisions();
+        }
+        repaint();
     }
 
     public class myKeyAdapter extends KeyAdapter{
